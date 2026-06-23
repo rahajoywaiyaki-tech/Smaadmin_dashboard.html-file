@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SmartAdmin Dashboard</title>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; }
+    
+    body { display: flex; background: #f0f2f5; min-height: 100vh; }
+    
+    /* Sidebar */
+    .sidebar {
+        width: 240px;
+        background: linear-gradient(180deg, #1e3c72 0%, #2a5298 100%);
+        color: white;
+        padding: 20px 0;
+        position: fixed;
+        height: 100vh;
+    }
+    
+    .sidebar h2 {
+        text-align: center;
+        padding: 10px;
+        margin-bottom: 30px;
+        font-size: 22px;
+        border-bottom: 1px solid rgba(255,255,255,0.2);
+    }
+    
+    .sidebar a {
+        display: block;
+        padding: 14px 25px;
+        color: #e0e0e0;
+        text-decoration: none;
+        transition: 0.3s;
+    }
+    
+    .sidebar a:hover, .sidebar a.active {
+        background: rgba(255,255,255,0.15);
+        border-left: 4px solid #ffcc00;
+        color: white;
+    }
+    
+    /* Main Content */
+    .main {
+        margin-left: 240px;
+        flex: 1;
+        padding: 25px;
+    }
+    
+    .header {
+        background: linear-gradient(90deg, #ffb347, #ffcc33);
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 25px;
+        color: #333;
+        font-size: 24px;
+        font-weight: bold;
+    }
+    
+    /* Stat Cards */
+    .cards {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+        margin-bottom: 25px;
+    }
+    
+    .card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        text-align: center;
+    }
+    
+    .card h3 {
+        font-size: 32px;
+        margin-bottom: 5px;
+    }
+    
+    .card p {
+        font-size: 14px;
+        opacity: 0.9;
+    }
+    /*container */
+    .assignments-card {
+    width: 400px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.card-header h3 {
+    font-size: 16px;
+    color: #444;
+}
+
+.card-header a {
+    text-decoration: none;
+    color: #3f51b5;
+    font-weight: bold;
+}
+.user-profile {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.user-avatar {
+    width: 50px;
+    height: 50px;
+    background: #ffea00;
+    color: #001f5c;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.user-info {
+    flex: 1;
+    margin-left: 12px;
+}
+
+.user-info h3 {
+    margin: 0;
+    color: white;
+    font-size: 20px;
+}
+
+.user-info p {
+    margin: 0;
+    color: #ffea00;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.logout-btn {
+    background: none;
+    border: none;
+    color: #ccc;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.logout-btn:hover {
+    color: white;
+}
+.assignment {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f5f5f5;
+    padding: 12px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+}
+
+.assignment h4 {
+    margin: 0;
+    font-size: 14px;
+}
+
+.assignment p {
+    margin: 3px 0 0;
+    color: #666;
+    font-size: 12px;
+}
+
+.assignment span {
+    font-weight: bold;
+    color: #555;
+}
+.messages-card {
+    background: #fff;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    margin-top: 20px;
+}
+
+.messages-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.messages-header h3 {
+    margin: 0;
+    font-size: 16px;
+    color: #333;
+}
+
+.messages-header a {
+    text-decoration: none;
+    color: #3f51b5;
+    font-weight: bold;
+}
+
+.message {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 12px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    background: #e0d000;
+    color: #000;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+}
+
+.message-content {
+    flex: 1;
+}
+
+.message-content h4 {
+    margin: 0;
+    font-size: 14px;
+}
+
+.message-content p {
+    margin: 4px 0 0;
+    font-size: 12px;
+    color: #666;
+}
+
+.message span {
+    font-size: 12px;
+    color: #555;
+    font-weight: bold;
+}
+    /* Chart Box - CSS only, no JS */
+    .chart-box {
+        background: white;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+        margin-bottom: 25px;
+    }
+    
+    .chart-box h3 { margin-bottom: 15px; color: #333; }
+    
+    .fake-chart {
+        height: 200px;
+        background: linear-gradient(to right, #e0e7ff 0%, #c7d2fe 100%);
+        border-radius: 8px;
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-around;
+        padding: 20px;
+    }
+    
+    .bar {
+        width: 40px;
+        background: linear-gradient(180deg, #667eea, #764ba2);
+        border-radius: 5px 5px 0 0;
+        transition: 0.3s;
+    }
+    
+    .bar:nth-child(1) { height: 60%; }
+    .bar:nth-child(2) { height: 85%; }
+    .bar:nth-child(3) { height: 70%; }
+    .bar:nth-child(4) { height: 95%; }
+    .bar:nth-child(5) { height: 80%; }
+    
+    /* Table */
+    table {
+        width: 100%;
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+        border-collapse: collapse;
+    }
+    
+    th {
+        background: #667eea;
+        color: white;
+        padding: 15px;
+        text-align: left;
+    }
+    
+    td {
+        padding: 14px 15px;
+        border-bottom: 1px solid #eee;
+    }
+    tr:hover td { background: #f8f9ff; }
+   </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <h2>SmartAdmin</h2>
+        <a href="#" class="active">Staff Overview</a>
+        <a href="#">My Timetable</a>
+        <a href="#">Attendance</a>
+        <a href="#">Grades and Reports</a>
+        <a href="#">Assignments</a>
+        <a href="#">Leave Requests</a>
+        <a href="#">Resources</a>
+    </div>
+</div>
+     <div class="user-profile">
+    <div class="user-avatar">
+        U
+    </div>
+
+    <div class="user-info">
+        <h3>User</h3>
+        <p>Staff/Teachers</p>
+    </div>
+
+    <button class="logout-btn">
+        <i class="fas fa-sign-out-alt"></i>
+    </button>
+</div>
+    <div class="main">
+        <div class="header">Dashboard Overview</div>
+        
+        <div class="cards">
+            <div class="card">
+                <h3>3</h3>
+                <p>Staff Members</p>
+                <p>2N.4S.3N</p>
+            </div>
+            <div class="card">
+                <h3>98%</h3>
+                <p>Attendance Rate</p>
+                <p>+3.2%</p>
+            </div>
+            <div class="card">
+               <h3>105</h3>
+               <p>Total Students</p>
+               <p>+10 students</p>
+            </div>
+            <div class="card">
+                <h3>23</h3>
+                <p>Pending Tasks</p>
+                <p>Assignments</p>
+            </div>
+            </div>
+            <div class="chart-box">
+                <h3>Performancee Overview</h3>
+                <div class="fake-chart">
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                </div>
+            </div>
+            <table>
+                <tr>
+                    <th>StudentID</th>
+                    <th>FirstName</th>
+                    <th>Course</th>
+                    <th>Status</th>
+                </tr>
+                <tr>
+                    <td>001</td>
+                    <td>Jane</td>
+                    <td>ICT</td>
+                    <td>Active</td>
+                </tr>
+                <tr>
+                    <td>002</td>
+                    <td>John</td>
+                    <td>Business</td>
+                    <td>Active</td>
+                </tr>
+                <tr>
+                    <td>003</td>
+                    <td>Mbali</td>
+                    <td>Hospitality</td>
+                    <td>Active</td>
+                </tr>
+            </table>
+
+            </div>
+    <div class="assignments-card">
+    <div class="card-header">
+        <h3>UPCOMING ASSIGNMENTS</h3>
+        <a href="#">Add More</a>
+    </div>
+
+    <div class="assignment">
+        <div>
+            <h4>CHEMISTRY TEST</h4>
+            <p>2N - Due 3 June</p>
+        </div>
+        <span>28/45</span>
+    </div>
+
+    <div class="assignment">
+        <div>
+            <h4>BIOLOGY TEST</h4>
+            <p>2N - Due 3 June</p>
+        </div>
+        <span>28/45</span>
+    </div>
+
+    <div class="assignment">
+        <div>
+            <h4>CHEMISTRY TEST</h4>
+            <p>2N - Due 5 June</p>
+        </div>
+        <span>30/50</span>
+    </div>
+
+    <div class="assignment">
+        <div>
+            <h4>CHEMISTRY</h4>
+            <p>2N - Due 7 June</p>
+        </div>
+        <span>20/30</span>
+    </div>
+</div><div class="messages-card">
+    <div class="messages-header">
+        <h3>RECENT PARENT MESSAGES</h3>
+        <a href="#">View All</a>
+    </div>
+
+    <div class="message">
+        <div class="avatar">D</div>
+        <div class="message-content">
+            <h4>Mr Doe (John's Parent)</h4>
+            <p>Could we schedule a meeting to discuss John's recent test performance?</p>
+        </div>
+        <span>Today 8 AM</span>
+    </div>
+
+    <div class="message">
+        <div class="avatar">M</div>
+        <div class="message-content">
+            <h4>Mrs Mary (Jane's Parent)</h4>
+            <p>Thank you for the progress update. Jane is improving.</p>
+        </div>
+        <span>Today 10 AM</span>
+    </div>
+
+    <div class="message">
+        <div class="avatar">K</div>
+        <div class="message-content">
+            <h4>Mr Kimani (Brian's Parent)</h4>
+            <p>Will there be extra revision classes before exams?</p>
+        </div>
+        <span>Yesterday</span>
+    </div>
+</div>
+
+</body>
+</html>
